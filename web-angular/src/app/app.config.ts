@@ -7,6 +7,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';// impo
 import { environment } from '../environments/environment'; //ruta con las credenciales de Firebase
 
 import { provideStorage, getStorage} from '@angular/fire/storage'; // importar Storage para gestión de archivos
+import { provideMessaging, getMessaging } from '@angular/fire/messaging';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     // Configuración de Firebase
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage())
+    provideStorage(() => getStorage()),
+    provideMessaging(() => getMessaging())
   ]
 };
