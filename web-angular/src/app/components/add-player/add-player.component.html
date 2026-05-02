@@ -1,0 +1,122 @@
+<div class="card border-0">
+  <div class="card-body">
+    <h3 class="mb-4 text-primary"><i class="bi bi-person-plus-fill me-2"></i>Añadir Nuevo Jugador</h3>
+
+    @if (successMessage) {
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      <div>
+        Jugador guardado correctamente
+      </div>
+    </div>
+    }
+
+    <form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Nombre</label>
+          <input type="text" class="form-control" formControlName="nombre"
+            [class.is-invalid]="getControlError('nombre')">
+          @if (getControlError('nombre')) {
+          <div class="invalid-feedback">El nombre es obligatorio.</div>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Apellidos</label>
+          <input type="text" class="form-control" formControlName="apellidos"
+            [class.is-invalid]="getControlError('apellidos')">
+          @if (getControlError('apellidos')) {
+          <div class="invalid-feedback">Los apellidos son obligatorios.</div>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Posición</label>
+          <select class="form-select" formControlName="posicion" [class.is-invalid]="getControlError('posicion')">
+            <option value="">Selecciona posición...</option>
+            <option value="Base">Base</option>
+            <option value="Escolta">Escolta</option>
+            <option value="Alero">Alero</option>
+            <option value="Ala-Pívot">Ala-Pívot</option>
+            <option value="Pívot">Pívot</option>
+          </select>
+          @if (getControlError('posicion')) {
+          <div class="invalid-feedback">La posición es obligatoria.</div>
+          }
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold">Edad</label>
+          <input type="number" class="form-control" formControlName="edad" [class.is-invalid]="getControlError('edad')">
+          @if (getControlError('edad')) {
+          <div class="invalid-feedback">Edad no válida.</div>
+          }
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold">Precio ($)</label>
+          <input type="number" class="form-control" formControlName="precio"
+            [class.is-invalid]="getControlError('precio')">
+          @if (getControlError('precio')) {
+          <div class="invalid-feedback">El precio es obligatorio.</div>
+          }
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Altura</label>
+          <input type="text" class="form-control" formControlName="altura" placeholder="Ej: 1.95m"
+            [class.is-invalid]="getControlError('altura')">
+          @if (getControlError('altura')) {
+          <div class="invalid-feedback">La altura es obligatoria.</div>
+          }
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Peso</label>
+          <input type="text" class="form-control" formControlName="peso" placeholder="Ej: 90kg"
+            [class.is-invalid]="getControlError('peso')">
+          @if (getControlError('peso')) {
+          <div class="invalid-feedback">El peso es obligatorio.</div>
+          }
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Experiencia</label>
+          <input type="text" class="form-control" formControlName="experiencia" placeholder="Ej: 5 años"
+            [class.is-invalid]="getControlError('experiencia')">
+          @if (getControlError('experiencia')) {
+          <div class="invalid-feedback">La experiencia es obligatoria.</div>
+          }
+        </div>
+
+        <div class="col-12">
+          <label class="form-label fw-bold">Descripción / Biografía</label>
+          <textarea class="form-control" formControlName="descripcion" rows="3"></textarea>
+        </div>
+
+        <div class="col-md-6 mt-4">
+          <label class="form-label fw-bold">Subir Foto (Archivo local)</label>
+          <input type="file" class="form-control" accept="image/*" (change)="onImageSelected($event)">
+        </div>
+
+        <div class="col-md-6 mt-4">
+          <label class="form-label fw-bold">Subir Poster (Archivo local)</label>
+          <input type="file" class="form-control" accept="image/*" (change)="onPosterSelected($event)">
+        </div>
+
+        <div class="col-md-6 mt-4">
+          <label class="form-label fw-bold">Subir enlace vídeo de Highlights (Dropbox)</label>
+          <input type="text" class="form-control" formControlName="videoUrl"
+            placeholder="Ej: https://www.dropbox.com/scl/fi/...">
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold">
+          <i class="bi bi-save me-2"></i> Guardar Jugador
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

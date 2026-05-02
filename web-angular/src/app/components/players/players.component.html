@@ -1,0 +1,72 @@
+<div class="list-group list-group-flush">
+
+  <div class="px-3 py-2 border-bottom bg-light d-flex gap-2 align-items-center">
+    <select class="form-select form-select-sm w-auto" [(ngModel)]="campoBusqueda">
+      <option value="nombre">Nombre</option>
+      <option value="apellidos">Apellidos</option>
+      <option value="posicion">Posición</option>
+      <option value="edad">Edad</option>
+      <option value="altura">Altura</option>
+    </select>
+    <div class="input-group input-group-sm flex-grow-1">
+      <span class="input-group-text bg-light border-end-0">
+        <i class="bi bi-search text-muted"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control border-start-0 ps-0"
+        placeholder="Buscar jugador..."
+        [(ngModel)]="textoBusqueda">
+    </div>
+  </div>
+
+  <div class="px-3 py-2 border-bottom bg-light d-flex gap-2 align-items-center">
+    <select class="form-select form-select-sm flex-grow-1" [(ngModel)]="filtroEdad">
+      <option value="todas">Todos</option>
+      <option value="jovenes">Promesas (&lt; 30 años)</option>
+      <option value="veterano">Veteranos (≥ 30 años)</option>
+    </select>
+    <select class="form-select form-select-sm w-auto" (change)="onCurrencyChange($event)">
+      <option value="EUR" [selected]="selectedCurrency === 'EUR'">EUR (€)</option>
+      <option value="USD" [selected]="selectedCurrency === 'USD'">USD ($)</option>
+      <option value="GBP" [selected]="selectedCurrency === 'GBP'">GBP (£)</option>
+      <option value="JPY" [selected]="selectedCurrency === 'JPY'">JPY (¥)</option>
+    </select>
+  </div>
+
+  @for (player of players | filtroEdad:filtroEdad | filterPlayers:textoBusqueda:campoBusqueda; track player.id) {
+    <button type="button"
+      class="list-group-item list-group-item-action player-item px-3 py-3 border-bottom"
+      [class.player-item--active]="selectedPlayerId === player.id"
+      (click)="onSelectPlayer(player)">
+
+      <div class="d-flex align-items-center gap-3">
+
+        <div class="player-avatar rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+             [class.player-avatar--active]="selectedPlayerId === player.id">
+          <span class="fw-bold">{{ player.nombre.charAt(0) }}</span>
+        </div>
+
+        <div class="flex-grow-1 overflow-hidden">
+          <div class="fw-semibold text-truncate">{{ player.nombre }} {{ player.apellidos }}</div>
+          <div class="d-flex align-items-center gap-2 mt-1">
+            <span class="badge position-badge">{{ player.posicion }}</span>
+            <small class="text-muted">{{ player.edad }} años · {{ player.altura }}</small>
+          </div>
+          <div class="mt-2 fw-bold text-success small">
+            Valor: {{ player.precio | currencyExchange:selectedCurrency }}
+          </div>
+        </div>
+
+        <button 
+          class="btn btn-outline-danger btn-sm flex-shrink-0" 
+          (click)="eliminarJugador(player.id); $event.stopPropagation()"
+          title="Eliminar jugador">
+          <i class="bi bi-trash"></i>
+        </button>
+
+      </div>
+
+    </button>
+  }
+</div>

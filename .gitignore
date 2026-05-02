@@ -1,0 +1,12 @@
+# Bloquear dependencias de Angular, React Native y Functions
+**/node_modules/
+
+# Bloquear archivos locales de Android
+**/android/local.properties
+
+# Bloquear archivos de entorno con contraseñas
+**/.env
+**/environment.ts
+
+# Bloquear compilaciones
+**/dist/

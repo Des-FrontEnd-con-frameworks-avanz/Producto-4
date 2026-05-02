@@ -1,0 +1,11 @@
+// Layout sticky footer: el body ocupa al menos toda la pantalla
+// y el main crece para empujar el footer hacia abajo
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+}

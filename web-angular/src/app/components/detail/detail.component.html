@@ -1,0 +1,201 @@
+@if (player && !isEditing) {
+<div class="d-flex flex-column gap-3">
+
+  <div class="row g-3 align-items-stretch">
+    <div class="col-12">
+      <div class="row row-cols-2 row-cols-md-5 g-2 h-100">
+
+        <div class="col d-flex">
+          <div
+            class="stat-card p-2 rounded-3 bg-light border w-100 h-100 d-flex align-items-center justify-content-center">
+            <img [src]="player.fotoUrl" [alt]="player.nombre" class="img-fluid"
+              style="max-height: 100px; max-width: 100%; object-fit: contain"
+              onerror="this.src = 'https://placehold.co/200x320?text=Sin+Foto'" />
+          </div>
+        </div>
+
+        <div class="col d-flex">
+          <div class="stat-card text-center p-3 rounded-3 bg-light border w-100 h-100">
+            <i class="bi bi-calendar-event text-primary d-block fs-5 mb-1"></i>
+            <div class="fw-bold">{{ player.edad }}</div>
+            <small class="text-muted">Años</small>
+          </div>
+        </div>
+
+        <div class="col d-flex">
+          <div class="stat-card text-center p-3 rounded-3 bg-light border w-100 h-100">
+            <i class="bi bi-arrows-vertical text-primary d-block fs-5 mb-1"></i>
+            <div class="fw-bold">{{ player.altura }}</div>
+            <small class="text-muted">Altura</small>
+          </div>
+        </div>
+
+        <div class="col d-flex">
+          <div class="stat-card text-center p-3 rounded-3 bg-light border w-100 h-100">
+            <i class="bi bi-activity text-primary d-block fs-5 mb-1"></i>
+            <div class="fw-bold">{{ player.peso }}</div>
+            <small class="text-muted">Peso</small>
+          </div>
+        </div>
+
+        <div class="col d-flex">
+          <div class="stat-card text-center p-3 rounded-3 bg-light border w-100 h-100">
+            <i class="bi bi-trophy text-primary d-block fs-5 mb-1"></i>
+            <div class="fw-bold">{{ player.experiencia }}</div>
+            <small class="text-muted">Exp.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="border rounded-3 p-3 bg-light d-flex flex-column">
+        <h6 class="fw-semibold mb-2 text-uppercase" style="font-size: 0.75rem; letter-spacing: 1px; color: #6c757d;">
+          <i class="bi bi-play-circle me-1 text-primary"></i> Jugadas destacadas
+        </h6>
+
+        @if (player.videoUrl) {
+        <div class="position-relative rounded overflow-hidden bg-black shadow-sm"
+          style="min-height: 350px; cursor: pointer;" (click)="mostrarModalVideo = true">
+          <img [src]="player.posterUrl" class="w-100 h-100 position-absolute top-0 start-0"
+            style="object-fit: cover; opacity: 0.8;" [alt]="'Poster de ' + player.nombre"
+            onerror="this.src='/images/poster.jpg'">
+          <div class="position-absolute top-50 start-50 translate-middle">
+            <i class="bi bi-play-circle-fill text-white opacity-75" style="font-size: 3.5rem;"></i>
+          </div>
+        </div>
+        } @else {
+        <div
+          class="text-center py-4 border rounded bg-white flex-grow-1 d-flex flex-column align-items-center justify-content-center"
+          style="min-height: 200px;">
+          <i class="bi bi-camera-video-off text-muted fs-2"></i>
+          <p class="small text-muted mb-0 mt-2">Video no disponible</p>
+        </div>
+        }
+
+        @if (mostrarModalVideo && player) {
+        <app-media [player]="player" (cerrarModal)="mostrarModalVideo = false"></app-media>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de posición: ocupa todo el ancho -->
+  <div class="position-bar text-white text-center fw-bold text-uppercase py-2 rounded-3"
+    style="background-color: #1d428a; letter-spacing: 2px;">
+    <i class="bi bi-dribbble me-2"></i>{{ player.posicion }}
+  </div>
+</div>
+<div class="mt-4 text-end">
+  <button class="btn btn-outline-primary btn-s" (click)="onEditPlayerClick()">
+    <i class="bi bi-pencil-square"></i> Editar Jugador
+  </button>
+</div>
+
+} @else if (isEditing && player) {
+<div class="card border-0">
+  <div class="card-body">
+    <h3 class="mb-4 text-primary"><i class="bi bi-pencil-square me-2"></i>{{player.nombre}} {{player.apellidos}}
+    </h3>
+
+    @if (successMessage) {
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      <div>
+        Jugador editado correctamente
+      </div>
+    </div>
+    }
+
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Nombre</label>
+          <input type="text" class="form-control" formControlName="nombre">
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Apellidos</label>
+          <input type="text" class="form-control" formControlName="apellidos">
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Posición</label>
+          <select class="form-select" formControlName="posicion">
+            <option value="Base">Base</option>
+            <option value="Escolta">Escolta</option>
+            <option value="Alero">Alero</option>
+            <option value="Ala-Pívot">Ala-Pívot</option>
+            <option value="Pívot">Pívot</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold">Edad</label>
+          <input type="number" class="form-control" formControlName="edad">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-bold">Precio ($)</label>
+          <input type="number" class="form-control" formControlName="precio">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Altura</label>
+          <input type="text" class="form-control" formControlName="altura">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Peso</label>
+          <input type="text" class="form-control" formControlName="peso">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Experiencia</label>
+          <input type="text" class="form-control" formControlName="experiencia">
+
+        </div>
+
+        <div class="col-12">
+          <label class="form-label fw-bold">Descripción / Biografía</label>
+          <textarea class="form-control" formControlName="descripcion" rows="3"></textarea>
+        </div>
+
+        <div class="col-md-6 mt-4">
+          <label class="form-label fw-bold">Subir Foto (Archivo local)</label>
+          <input type="file" class="form-control" accept="image/*" (change)="onImageSelected($event)">
+        </div>
+
+        <div class="col-md-6 mt-4">
+          <label class="form-label fw-bold">Subir Poster (Archivo local)</label>
+          <input type="file" class="form-control" accept="image/*" (change)="onPosterSelected($event)">
+        </div>
+
+        <div class="col-md-6 mt-4">
+          <label class="form-label fw-bold">Subir enlace vídeo de Highlights (Dropbox)</label>
+          <input type="text" class="form-control" formControlName="videoUrl"
+            placeholder="Ej: https://www.dropbox.com/scl/fi/...">
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button class="btn btn-outline-secondary px-4 py-2 fw-semibold" (click)=onCancelClick()>
+          <i class="bi bi-x-circle me-2"></i> Cancelar Cambios
+        </button>
+        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold">
+          <i class="bi bi-save me-2"></i> Guardar Cambios
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+}@else {
+<div class="text-center py-5 text-muted">
+  <i class="bi bi-person-bounding-box display-1 opacity-25 d-block mb-3"></i>
+  <p class="fs-5 mb-1">Ningún jugador seleccionado</p>
+  <small>Haz clic en un jugador de la lista para ver su ficha completa</small>
+</div>
+}

@@ -1,0 +1,24 @@
+/* Estilos globales */
+:root {
+  --bs-primary: #1d428a;
+  --bs-primary-rgb: 29, 66, 138;
+}
+
+body {
+  background-color: #f0f2f5;
+  color: #212529;
+}
+
+// Scrollbar sutil
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #adb5bd;
+  border-radius: 3px;
+}

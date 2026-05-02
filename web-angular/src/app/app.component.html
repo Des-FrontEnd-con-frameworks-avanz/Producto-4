@@ -1,0 +1,20 @@
+<nav class="navbar navbar-dark navbar-expand-lg shadow-sm" style="background-color: #1d428a;">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-4" href="#">
+      <i class="bi bi-dribbble"></i>
+      {{ title | uppercase }}
+    </a>
+    <span class="navbar-text text-white-50 small d-none d-md-block">
+      <i class="bi bi-calendar3 me-1"></i> Temporada 2025–26
+    </span>
+  </div>
+</nav>
+
+<main class="app-main py-4">
+  <router-outlet/>
+</main>
+
+<footer class="text-center text-muted py-3 border-top bg-white small">
+  <i class="bi bi-dribbble me-1 text-primary"></i>
+  NoobDevs Basketball Team &copy; 2026
+</footer>

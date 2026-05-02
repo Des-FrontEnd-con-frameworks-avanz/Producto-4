@@ -1,0 +1,139 @@
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  background: #000;
+  aspect-ratio: 16 / 9; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; 
+  background: #000;
+  display: block; 
+}
+
+.video-loader-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5; 
+  pointer-events: none; 
+}
+
+.spinner-nba {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-top: 5px solid #c8102e;
+  border-left: 5px solid #1d428a;
+  border-radius: 50%;
+  animation: spin-nba 1s linear infinite;
+}
+
+@keyframes spin-nba {
+  to { transform: rotate(360deg); }
+}
+
+.nba-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  accent-color: #c8102e; 
+
+  &.progress-slider {
+    width: 100%;
+    height: 6px;
+    transition: height 0.2s;
+    &:hover { height: 8px; }
+  }
+
+  &.volume-slider {
+    width: 80px;
+    height: 4px;
+  }
+}
+
+.video-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+}
+
+.video-modal-content {
+  width: 90%;
+  max-width: 900px;
+  position: relative;
+  animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reproductor-master {
+  background: #000;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.controles-nba-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.95));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding-bottom: 5px;
+  z-index: 10;
+}
+
+.video-wrapper:hover .controles-nba-overlay {
+  opacity: 1;
+}
+
+.btn-icon {
+  background: none; border: none; color: white;
+  font-size: 2rem; display: flex; align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s, color 0.2s;
+  &:hover { transform: scale(1.15); color: #1d428a; }
+  &.btn-stop:hover { color: #c8102e; }
+  &.sm { font-size: 1.2rem; }
+}
+
+.btn-cerrar-nba {
+  position: absolute;
+  top: -20px; right: -20px;
+  width: 45px; height: 45px;
+  background: #c8102e; color: white;
+  border-radius: 50%; border: 3px solid white;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  transition: all 0.2s;
+  &:hover { background: #1d428a; transform: scale(1.1); }
+}
+
+.time-display {
+  color: white; font-family: monospace; font-size: 0.9rem;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}

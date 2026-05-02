@@ -1,0 +1,67 @@
+@if (player) {
+  <div class="video-modal-overlay" (click)="notificarCierre()">
+    <div class="video-modal-content" (click)="$event.stopPropagation()">
+      
+      <button class="btn-cerrar-nba" (click)="notificarCierre()" title="Cerrar">
+        <i class="bi bi-x-lg"></i>
+      </button>
+
+      <div class="reproductor-master shadow-2xl overflow-hidden">
+        <div class="video-wrapper position-relative">
+          
+          @if (isWaiting) {
+            <div class="video-loader-overlay">
+              <div class="spinner-nba"></div>
+            </div>
+          }
+
+          <video 
+            #miVideo 
+            [src]="safeVideoUrl"
+            [poster]="player.posterUrl" 
+            class="w-100" 
+            autoplay
+            playsinline
+            (click)="togglePlay()">
+          </video>
+
+          <div class="controles-nba-overlay">
+            <div class="progress-area px-3">
+              <input  type="range" class="nba-slider progress-slider" 
+                      min="0" [max]="duration" [value]="currentTime"
+                      (input)="seekVideo($event)">
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between p-3 pt-1">
+              <div class="d-flex align-items-center gap-3">
+                <button class="btn-icon" (click)="togglePlay()">
+                  <i class="bi" [ngClass]="isPlaying ? 'bi-pause-fill' : 'bi-play-fill'"></i>
+                </button>
+                
+                <button class="btn-icon btn-stop" (click)="stopVideo()">
+                  <i class="bi bi-stop-fill"></i>
+                </button>
+
+                <span class="time-display">
+                  {{ formatTime(currentTime) }} / {{ formatTime(duration) }}
+                </span>
+              </div>
+
+              <div class="d-flex align-items-center gap-4">
+                <div class="volume-container d-flex align-items-center gap-2">
+                  <i class="bi bi-volume-up-fill text-white opacity-75"></i>
+                  <input  type="range" class="nba-slider volume-slider" 
+                          min="0" max="100" (input)="cambiarVolumen($event)">
+                </div>
+                
+                <button class="btn-icon sm" (click)="toggleFullScreen()">
+                  <i class="bi bi-arrows-fullscreen"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

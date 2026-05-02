@@ -1,0 +1,33 @@
+.player-item {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #f0f4ff;
+  }
+
+  &--active {
+    background-color: #e8eeff !important;
+    border-left: 4px solid #1d428a !important;
+  }
+}
+
+.player-avatar {
+  width: 42px;
+  height: 42px;
+  background-color: #dee2e6;
+  color: #495057;
+  font-size: 1.1rem;
+
+  &--active {
+    background-color: #1d428a;
+    color: #fff;
+  }
+}
+
+.position-badge {
+  background-color: #e9ecef;
+  color: #495057;
+  font-weight: 500;
+  font-size: 0.72rem;
+}

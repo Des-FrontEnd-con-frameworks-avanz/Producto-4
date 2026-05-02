@@ -1,0 +1,69 @@
+<!-- Layout principal -->
+<div class="container">
+  <div class="row g-4">
+
+    <!-- Columna izquierda: lista de jugadores -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-bottom d-flex align-items-center gap-2 py-3">
+          <i class="bi bi-people-fill text-primary fs-5"></i>
+          <span class="fw-semibold">Plantilla</span>
+          <span class="badge bg-primary ms-auto rounded-pill">{{ players.length }}</span>
+        </div>
+        <div class="m-2 ">
+          <button class="btn btn-outline-success btn-s w-100 " (click)="onNewPlayerClick()">
+            <i class="bi bi-plus-circle"></i> Nuevo jugador
+          </button>
+        </div>
+        <div class="card-body p-0">
+          <app-players (playerSelected)="handlePlayerSelection($event)"></app-players>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna derecha: detalle del jugador -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm h-100">
+
+        <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+          @if (!selectedPlayer && !isAdding) {
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-person-badge-fill text-primary fs-5"></i>
+            <span class="fw-semibold">Ficha del Jugador</span>
+          </div>
+          } @else if (isAdding) {
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-person-plus-fill text-primary fs-5"></i>
+            <span class="fw-semibold">Nuevo Jugador</span>
+          </div>
+          } @else {
+          <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-person-badge-fill text-primary fs-5 flex-shrink-0"></i>
+            <div>
+              <div class="fw-bold lh-1">{{ selectedPlayer?.nombre }} {{ selectedPlayer?.apellidos }}</div>
+              <small class="text-muted">{{ selectedPlayer?.descripcion }}</small>
+            </div>
+          </div>
+          }
+
+        </div>
+
+        <div class="card-body">
+          @if (!selectedPlayer && !isAdding) {
+          <div class="empty-state text-center py-5 text-muted">
+            <i class="bi bi-person-bounding-box display-1 opacity-25 d-block mb-3"></i>
+            <p class="fs-5 mb-1">Ningún jugador seleccionado</p>
+            <small>Haz clic en un jugador de la lista para ver su ficha completa o añade uno nuevo.</small>
+          </div>
+          } @else if (isAdding) {
+          <app-add-player (playerAdded)="onPlayerAdded()"></app-add-player>
+          } @else {
+          <app-detail [player]="selectedPlayer!"></app-detail>
+          }
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

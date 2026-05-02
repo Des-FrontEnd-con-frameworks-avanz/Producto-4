@@ -1,0 +1,14 @@
+.empty-state {
+  min-height: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+// El card-body crece para que empty-state pueda centrarse verticalmente
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
