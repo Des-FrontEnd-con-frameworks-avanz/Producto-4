@@ -9,8 +9,8 @@
  * Autor: Pol (Producto 3 - FP067)
  */
 
-import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, Image, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { TouchableOpacity, Text, StyleSheet, Image, View, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
@@ -21,6 +21,10 @@ import '@react-native-firebase/app';
 import ListadoScreen from './src/screens/ListadoScreen';
 import DetalleScreen from './src/screens/DetalleScreen';
 import MultimediaScreen from './src/screens/MultimediaScreen';
+import {
+  inicializarNotificaciones,
+  escucharMensajesEnPrimerPlano,
+} from './src/services/NotificationService';
 import type { Player } from './src/types/Player';
 
 const logo = require('./src/assets/logo.png');
@@ -62,6 +66,27 @@ const HeaderTitle: React.FC<{ title: string }> = ({ title }) => (
 );
 
 export default function App(): React.JSX.Element {
+  useEffect(() => {
+    // Cancelables que se devuelven al desmontar el componente.
+    let cancelarRefresh: (() => void) | undefined;
+    const cancelarPrimerPlano = escucharMensajesEnPrimerPlano(({ titulo, cuerpo }) => {
+      Alert.alert(titulo ?? 'Notificación', cuerpo ?? '');
+    });
+
+    inicializarNotificaciones()
+      .then((unsubscribe) => {
+        cancelarRefresh = unsubscribe;
+      })
+      .catch((error) => {
+        console.error('[App] Error inicializando notificaciones:', error);
+      });
+
+    return () => {
+      cancelarPrimerPlano();
+      cancelarRefresh?.();
+    };
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
