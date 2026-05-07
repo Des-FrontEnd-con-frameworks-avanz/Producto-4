@@ -12,21 +12,35 @@ export const onPlayerCreated = onDocumentWritten("players/{playerId}", async (ev
     if (!event.data.before.exists && event.data.after.exists) {
         
         const nuevoJugador = event.data.after.data();
-        const nombre = nuevoJugador?.nombre || "Jugador";
-        const apellidos = nuevoJugador?.apellidos || "Nuevo";
-        const nombreCompleto = `${nombre} ${apellidos}`;
-
-        const newMessage = {
-            notification: {
-                title: "¡Nuevo Fichaje Confirmado!",
-                body: `Se ha unido a la plantilla: ${nombreCompleto}.`
-            },
-            topic: "jugadores"
-        };
+        const nombreCompleto = `${nuevoJugador?.nombre || "Nuevo"} ${nuevoJugador?.apellidos || "Jugador"}`;
 
         try {
-            await admin.messaging().send(newMessage);
-            console.log(`Notificación enviada por creación de: ${nombreCompleto}`);
+            const tokensSnapshot = await admin.firestore().collection("fcmTokens").get();
+            const tokens: string[] = [];
+
+            tokensSnapshot.forEach((doc) => {
+                const data = doc.data();
+                if (data.token) {
+                    tokens.push(data.token);
+                }
+            });
+
+            if (tokens.length === 0) {
+                console.log("No hay tokens registrados. No se envía notificación.");
+                return;
+            }
+
+            const newMessage = {
+                notification: {
+                    title: "🏀 ¡Nuevo Fichaje Confirmado!",
+                    body: `Se ha unido a la plantilla: ${nombreCompleto}.`
+                },
+                tokens: tokens
+            };
+
+            const response = await admin.messaging().sendEachForMulticast(newMessage);
+            console.log(`¡Éxito! Notificación enviada a ${response.successCount} dispositivos.`);
+
         } catch (error) {
             console.error("Error enviando la notificación:", error);
         }
