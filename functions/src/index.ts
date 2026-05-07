@@ -12,7 +12,9 @@ export const onPlayerCreated = onDocumentWritten("players/{playerId}", async (ev
     if (!event.data.before.exists && event.data.after.exists) {
         
         const nuevoJugador = event.data.after.data();
-        const nombreCompleto = `${nuevoJugador.nombre} ${nuevoJugador.apellidos}`;
+        const nombre = nuevoJugador?.nombre || "Jugador";
+        const apellidos = nuevoJugador?.apellidos || "Nuevo";
+        const nombreCompleto = `${nombre} ${apellidos}`;
 
         const newMessage = {
             notification: {
