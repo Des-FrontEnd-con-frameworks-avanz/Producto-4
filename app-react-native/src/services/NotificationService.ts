@@ -5,9 +5,11 @@
  * Android:
  *   1. Solicita el permiso al usuario (Android 13+ requiere POST_NOTIFICATIONS).
  *   2. Obtiene el token FCM del dispositivo.
- *   3. Guarda el token en la colección `device_tokens` de Firestore para que
+ *   3. Guarda el token en la colección `fcmTokens` de Firestore para que
  *      Cloud Functions pueda recuperarlo y enviar la notificación.
- *   4. Escucha refrescos de token (onTokenRefresh) y los persiste también.
+ *   4. Se suscribe al topic `jugadores` para recibir notificaciones de
+ *      actualización (las publica la Cloud Function `onPlayerUpdated`).
+ *   5. Escucha refrescos de token (onTokenRefresh) y los persiste también.
  *
  * Autor: Pol — Producto 4 (FP067), parte del Integrante 1.
  *
@@ -23,7 +25,8 @@ import {
   serverTimestamp,
 } from '@react-native-firebase/firestore';
 
-const COLECCION_TOKENS = 'device_tokens';
+const COLECCION_TOKENS = 'fcmTokens';
+const TOPIC_JUGADORES = 'jugadores';
 
 /**
  * Pide permiso al usuario para recibir notificaciones.
@@ -86,6 +89,13 @@ export async function inicializarNotificaciones(): Promise<() => void> {
   const token = await messaging().getToken();
   console.log('[NotificationService] Token FCM:', token);
   await guardarTokenEnFirestore(token);
+
+  // Suscripción al topic `jugadores`, usado por la Cloud Function
+  // `onPlayerUpdated` para difundir cambios de precio sin tener que
+  // listar todos los tokens. Sin esta suscripción, las notificaciones
+  // de actualización no llegan al dispositivo.
+  await messaging().subscribeToTopic(TOPIC_JUGADORES);
+  console.log(`[NotificationService] Suscrito al topic "${TOPIC_JUGADORES}"`);
 
   // Si Firebase rota el token (limpieza de datos, reinstalación, etc.)
   // lo volvemos a persistir para que las Cloud Functions sigan teniendo
